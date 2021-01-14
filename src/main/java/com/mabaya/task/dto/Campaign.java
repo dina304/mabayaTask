@@ -8,6 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Getter
@@ -15,7 +19,7 @@ import java.util.*;
 public class Campaign extends CampaignInput {
     private UUID id;
     private int categoryId;
-    private List campaignProducts;
+    private List<Product> campaignProducts;
     private Long endDate;
 
     public Campaign(String name, String categoryName, double bid, Long startDate) {
@@ -23,10 +27,8 @@ public class Campaign extends CampaignInput {
         this.id = UUID.randomUUID();
         this.categoryId = Category.getIdByName(categoryName);
         this.campaignProducts = getProductsByCategory(categoryId);
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date(this.getStartDate()));
-        c.add(Calendar.DAY_OF_MONTH,10);
-        this.endDate=c.getTime().getTime();
+        LocalDate date = Instant.ofEpochSecond(this.getStartDate()).atZone(ZoneId.systemDefault()).toLocalDate();
+        this.endDate=date.plusDays(10).atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond();
     }
 
     private List getProductsByCategory(int categoryId) {
