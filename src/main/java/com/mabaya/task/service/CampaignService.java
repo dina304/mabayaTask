@@ -3,6 +3,7 @@ package com.mabaya.task.service;
 import com.mabaya.task.dto.Campaign;
 import com.mabaya.task.dto.CampaignInput;
 import com.mabaya.task.dto.Product;
+import com.mabaya.task.exceptions.DataNotFoundException;
 import com.mabaya.task.model.Category;
 import com.mabaya.task.model.DataConnector;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,16 @@ import java.util.stream.Collectors;
 @Service
 public class CampaignService {
 
-    public Product getServeAd(String categoryName) throws Exception {
+    public Product getServeAd(String categoryName) throws DataNotFoundException {
         Long currentDate = new Date().getTime() / 1000;
         int categoryId = Category.getIdByName(categoryName);
         Comparator<Campaign> comparator = Comparator.comparing(Campaign::getBid);
-        Optional<Campaign> maxCamp = DataConnector.campaign.values().stream()
+        Campaign maxCamp = DataConnector.campaign.values().stream()
                 .filter(campaign -> campaign.getCategoryId() == categoryId && campaign.getEndDate() > currentDate)
-                .max(comparator);
-        if (maxCamp.isPresent()) {
-            return maxCamp.get().getCampaignProducts().get(0);
-        } else {
-            throw new Exception("Not fit");
-        }
+                .max(comparator).orElse(DataConnector.campaign.values().stream()
+                        .filter(campaign -> campaign.getEndDate() > currentDate)
+                        .max(comparator).orElseThrow(DataNotFoundException::new));
+        return maxCamp.getCampaignProducts().get(0);
     }
 
     public Campaign addCampaign(CampaignInput campaignInput) {
