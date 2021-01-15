@@ -7,14 +7,9 @@ import com.mabaya.task.exceptions.DataNotFoundException;
 import com.mabaya.task.model.Category;
 import com.mabaya.task.model.DataConnector;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
-import javax.swing.text.html.Option;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CampaignService {

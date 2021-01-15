@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
-public class CustomExceptionHadler {
+public class CustomExceptionHandler {
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity handleException(DataNotFoundException ex) {
         ResponseEntity entity = new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);

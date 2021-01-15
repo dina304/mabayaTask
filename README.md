@@ -20,4 +20,5 @@
  5. In order to call Serve Ad and get some data , first need to call Create campaign
  
 # Run book :
- start app as spring boot application from TaskApplication Class
+ - Start app as spring boot application from TaskApplication Class
+ - Loombok is used for getters and setters and actuator is used for health check
